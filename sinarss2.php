@@ -1,6 +1,6 @@
 <?php
 
-// ÐÂÀËÎ¢²©RSS FeedÉú³ÉÆ÷²Ý¸ùÓÃ»§°æ£¬ ×÷Õß @williamlong [ http://www.williamlong.info ]
+// æ–°æµªå¾®åšRSS Feedç”Ÿæˆå™¨è‰æ ¹ç”¨æˆ·ç‰ˆï¼Œ ä½œè€… @williamlong [ http://www.williamlong.info ]
 
 $username=$_GET["id"]; // request any username with '?id='
 if ( empty($username) ) {
@@ -53,39 +53,39 @@ if (!empty($tcon)) {
 <?php
 
 class Collection{
-//Èë¿Ú ¹«ÓÐ
-var $url;       //Óû·ÖÎöµÄurlµØÖ·
-var $content; //¶ÁÈ¡µ½µÄÄÚÈÝ
-var $regExp; //Òª»ñÈ¡²¿·ÖµÄÕýÔò±í´ïÊ½
-var $codeFrom; //Ô­ÎÄµÄ±àÂë
-var $codeTo; //Óû×ª»»µÄ±àÂë
-var $timeout;        //µÈ´ýµÄÊ±¼ä
+//å…¥å£ å…¬æœ‰
+var $url;       //æ¬²åˆ†æžçš„urlåœ°å€
+var $content; //è¯»å–åˆ°çš„å†…å®¹
+var $regExp; //è¦èŽ·å–éƒ¨åˆ†çš„æ­£åˆ™è¡¨è¾¾å¼
+var $codeFrom; //åŽŸæ–‡çš„ç¼–ç 
+var $codeTo; //æ¬²è½¬æ¢çš„ç¼–ç 
+var $timeout;        //ç­‰å¾…çš„æ—¶é—´
 
-var $startFlag;       //ÎÄÕÂ¿ªÊ¼µÄ±êÖ¾ Ä¬ÈÏÎª0       ÔÚ½øÐÐÌõÄ¿Ê±£¬Ö»¶Ô$startFlag ºÍ $endFlagÖ®¼äµÄÎÄ×Ö¿é½øÐÐËÑË÷¡£
-var $endFlag;       //ÎÄÕÂ½áÊøµÄ±êÖ¾ Ä¬ÈÏÎªÎÄÕÂÄ©Î² ÔÚ½øÐÐÌõÄ¿Ê±£¬Ö»¶Ô$startFlag ºÍ $endFlagÖ®¼äµÄÎÄ×Ö¿é½øÐÐËÑË÷¡£  
-var $block;        //$startFlag ºÍ $endFlagÖ®¼äµÄÎÄ×Ö¿é
-//³ö¿Ú Ë½ÓÐ
-var $result;       //Êä³ö½á¹û
+var $startFlag;       //æ–‡ç« å¼€å§‹çš„æ ‡å¿— é»˜è®¤ä¸º0       åœ¨è¿›è¡Œæ¡ç›®æ—¶ï¼Œåªå¯¹$startFlag å’Œ $endFlagä¹‹é—´çš„æ–‡å­—å—è¿›è¡Œæœç´¢ã€‚
+var $endFlag;       //æ–‡ç« ç»“æŸçš„æ ‡å¿— é»˜è®¤ä¸ºæ–‡ç« æœ«å°¾ åœ¨è¿›è¡Œæ¡ç›®æ—¶ï¼Œåªå¯¹$startFlag å’Œ $endFlagä¹‹é—´çš„æ–‡å­—å—è¿›è¡Œæœç´¢ã€‚  
+var $block;        //$startFlag å’Œ $endFlagä¹‹é—´çš„æ–‡å­—å—
+//å‡ºå£ ç§æœ‰
+var $result;       //è¾“å‡ºç»“æžœ
 
-//³õÊ¼»¯ÊÕ¼¯Æ÷
+//åˆå§‹åŒ–æ”¶é›†å™¨
 function init(){
        if(empty($url))
        $this->getFile();
        $this->convertEncoding();
 }
-//ËùÐèÄÚÈÝ
+//æ‰€éœ€å†…å®¹
 function parse(){
        $this->getBlock();
        preg_match_all($this->regExp, $this->block ,$this->result,PREG_SET_ORDER);
        return $this->block;
 }
-//´íÎó´¦Àí
+//é”™è¯¯å¤„ç†
 function error($msg){
        echo $msg;
 }
-//¶ÁÈ¡Ô¶³ÌÍøÒ³ Èç¹û³É¹¦£¬´«»ØÎÄ¼þ£»Èç¹ûÊ§°Ü´«»Øfalse
+//è¯»å–è¿œç¨‹ç½‘é¡µ å¦‚æžœæˆåŠŸï¼Œä¼ å›žæ–‡ä»¶ï¼›å¦‚æžœå¤±è´¥ä¼ å›žfalse
 function getFile(){
-		//Ê¹ÓÃSAEµÄÓÃ»§¿ÉÒÔÓÃÏÂÃæÁ½¸öÌæ»»
+		//ä½¿ç”¨SAEçš„ç”¨æˆ·å¯ä»¥ç”¨ä¸‹é¢ä¸¤ä¸ªæ›¿æ¢
 		//$f = new SaeFetchurl();
 		//$datalines = $f->fetch($this->url);
        $datalines = @file($this->url);
@@ -94,7 +94,7 @@ function getFile(){
                  return false;
        } else {
 
-        //SAEÓÃ»§ÇëÓÃ×¢ÊÍÖÐµÄÓï¾ä
+        //SAEç”¨æˆ·è¯·ç”¨æ³¨é‡Šä¸­çš„è¯­å¥
 		//$importdata = $datalines;
         $importdata = implode('', $datalines); 
         $importdata = str_replace(array ("\r\n", "\r"), "\n", $importdata);                                        
@@ -102,18 +102,18 @@ function getFile(){
 		$this->content = $importdata;
 	   }
           }
-       //»ñÈ¡ËùÐèÒªµÄÎÄ×Ö¿é
+       //èŽ·å–æ‰€éœ€è¦çš„æ–‡å­—å—
        function getBlock(){
        if(!empty($this->startFlag))
         $this->block = substr($this->content,strpos($this->content,$this->startFlag));
        if(!empty($this->endFlag))
         $this->block = substr($this->block,0,strpos($this->block,$this->endFlag));
        }
-       //ÄÚÈÝ±àÂëµÄ×ª»»
+       //å†…å®¹ç¼–ç çš„è½¬æ¢
        function convertEncoding(){
        if(!empty($this->codeTo))
         $this->codeFrom = mb_detect_encoding($this->content);
-       //Èç¹û¸ø¶¨×ª»»·½°¸£¬²ÅÖ´ÐÐ×ª»»¡£
+       //å¦‚æžœç»™å®šè½¬æ¢æ–¹æ¡ˆï¼Œæ‰æ‰§è¡Œè½¬æ¢ã€‚
        if(!empty($this->codeTo))
         $this->content = mb_convert_encoding($this->content,$this->codeTo,$this->codeFrom) or $this->error("can't convert Encoding");
        }
