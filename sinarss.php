@@ -1,5 +1,7 @@
 <?php
 
+// 新浪微博RSS Feed生成器认证用户版， 作者 @williamlong [ http://www.williamlong.info ]
+
 $username=$_GET["username"]; // request any username with '?username='
 if ( empty($username) ) {
 	$username='williamlong';    // <-- change this to your username!
@@ -21,7 +23,7 @@ $C->parse();
 header("Content-type:application/xml");
 
 ?>
-<?xml version="1.0" encoding="utf-8" ?>
+
 <rss version="2.0">
 	<channel>
 		<title>rssfeed</title>
@@ -83,14 +85,20 @@ function error($msg){
 }
 //读取远程网页 如果成功，传回文件；如果失败传回false
 function getFile(){
-
-		$f = new SaeFetchurl();
-		$datalines = $f->fetch($this->url);
-             if(!$datalines){
+		//使用SAE的用户可以用下面两个替换
+		//$f = new SaeFetchurl();
+		//$datalines = $f->fetch($this->url);
+       $datalines = @file($this->url);
+			 if(!$datalines){
         $this->error("can't read the url:".$this->url);
                  return false;
        } else {
-        $importdata = $datalines;
+
+        //SAE用户请用注释中的语句
+		//$importdata = $datalines;
+        $importdata = implode('', $datalines); 
+        $importdata = str_replace(array ("\r\n", "\r"), "\n", $importdata);                                        
+
         $this->content = $importdata;
 	   }
           }
