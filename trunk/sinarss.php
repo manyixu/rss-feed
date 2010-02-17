@@ -17,6 +17,7 @@ $C->startFlag = '<ul class="MIB_feed onlytxt">';
 $C->endFlag   = '</ul>';
 $C->init();
 $C->regExp = "|<p class=\"sms\" mid=\"(.*)\" type=\"(.*)\">(.*)</p>|Uis";
+$C->regExpTime = "|<div class=\"lf\"><cite><a href=\"(.*)\">(.*)</a></cite>|Uis";
 
 $C->parse();
 
@@ -34,12 +35,13 @@ header("Content-type:application/xml");
 for ($i=0;$i<=9;$i++) { 
 	$tguid=$C->result[$i][1];
 	$tcon=strip_tags($C->result[$i][3]);
+	$time=strip_tags($C->timestamp[$i][2]);
 if (!empty($tcon)) {
 ?>
      <item>
 		<title><?php echo $tcon; ?></title>
 		<description><![CDATA[<?php echo $tcon; ?>]]></description>
-		<pubDate>2010-02-06T08:4<?php echo 9-$i; ?>:04Z</pubDate>
+		<pubDate><?php echo parse_timestamp($time); ?></pubDate>
 		<guid><?php echo $tguid; ?></guid>
 		<link></link>
 	</item>
@@ -57,6 +59,7 @@ class Collection{
 var $url;       //欲分析的url地址
 var $content; //读取到的内容
 var $regExp; //要获取部分的正则表达式
+var $regExpTime; //要获取发布时间部分的正则表达式
 var $codeFrom; //原文的编码
 var $codeTo; //欲转换的编码
 var $timeout;        //等待的时间
@@ -66,7 +69,7 @@ var $endFlag;       //文章结束的标志 默认为文章末尾 在进行条�
 var $block;        //$startFlag 和 $endFlag之间的文字块
 //出口 私有
 var $result;       //输出结果
-
+var $timestamp;		//时间
 //初始化收集器
 function init(){
        if(empty($url))
@@ -77,6 +80,7 @@ function init(){
 function parse(){
        $this->getBlock();
        preg_match_all($this->regExp, $this->block ,$this->result,PREG_SET_ORDER);
+	   preg_match_all($this->regExpTime, $this->block ,$this->timestamp,PREG_SET_ORDER);
        return $this->block;
 }
 //错误处理
@@ -119,4 +123,34 @@ function getFile(){
        }
 }//end of class
 
+
+$today_begin = mktime(0,0,0,date('m'),date('d'),date('Y'));
+$now = time();
+function parse_timestamp($time){
+	global $today_begin,$now;
+	if(strpos($time,'今天') === 0){
+		$datetime = date('Y-m-d ').str_replace('今天 ','',$time);
+	}
+	elseif(strpos($time,'分钟前')){
+		$datetime = date('Y-m-d H:i',$now-intval($time)*60);
+	}
+	elseif(strpos($time,'月')){
+		list($dates,$times) = explode(' ',$time);
+		$month = intval($dates);
+		$day = intval(substr($dates,strpos($dates,'日')-1,1));
+		$datetime = date('Y-').$month.'-'.$day.' '.$times;
+	}
+	elseif(strlen($time) > 10){
+		$datetime = $time;
+	}
+	
+
+
+	list($dates,$times) = explode(' ', $datetime);
+	list($year,$month,$day) = explode('-',$dates);
+	list($hour,$minute) = explode(':',$times);
+
+	return date('r',mktime($hour,$minute,0,$month,$day,$year));
+
+}
 ?>
