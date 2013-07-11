@@ -31,44 +31,42 @@ for ($i=0;$i<=20;$i++) {
         $tguid=$C->result[$i][3];
         $tcon=strip_tags($C->result[$i][1]);
 if (!empty($tcon)) {
+	$tcon = trim($tcon);
 ?>
-		<item>
-                <title>
-					<?php //以下由@西安胖子马增加 ?>
-					<?php //将最常见的特殊字符整理到数组中;
-						$table_change = array(
-							'&ldquo;'=>'“',
-							'&rdquo;' => '”',
-							'&hellip;' => '…',
-							'&nbsp;' => ' ',
-							'&mdash;' => '—',
-							'&middot;' => '·',
-							'&rarr;' => '→',
-							'&amp;gt;' => '>',
-							'&amp;quot;' => '"'
-						);
-						//print_r($table_change);
-						$chrkey = false; //定义一个参数，后边用作判断用;
-						//遍历数组，判断整理的特殊字符是否在微博中，只要检查到存在特殊字符，立刻设置$chrkey为真，并退出循环；
-						foreach ($table_change as  $key=>$val)
-						{
-							if(strpos($tcon,$key)){
-								$chrkey = true;
-								break;
-							}
-						}
-						if ($chrkey){//做判断，如果$chrkey为真，则说明存在定义的特殊字符，则输出替换过的微博内容
-							echo strtr($tcon,$table_change);
-						}elseif(strpos($tcon,'&')){//如果没有定义的特殊字符，那就判断是否存在&，如果有，则替换特殊字符的&和;
-							echo strtr($tcon,'&;','()');
-						}else{//如果以上都假，那就说明微博没有任何特色字符，直接输出微博内容。
-							echo $tcon;
-						}
-					?>
-					<?php //以上由@西安胖子马增加 ?>
-				</title>
+                <item>
+                <title><?php //以下由@西安胖子马增加 ?>
+<?php //将最常见的特殊字符整理到数组中;
+                                                $table_change = array(
+                                                        '&ldquo;'=>'“',
+                                                        '&rdquo;' => '”',
+                                                        '&hellip;' => '…',
+                                                        '&nbsp;' => ' ',
+                                                        '&mdash;' => '—',
+                                                        '&middot;' => '·',
+                                                        '&rarr;' => '→',
+                                                        '&amp;gt;' => '>',
+                                                        '&amp;quot;' => '"'
+                                                );
+                                                //print_r($table_change);
+                                                $chrkey = false; //定义一个参数，后边用作判断用;
+                                                //遍历数组，判断整理的特殊字符是否在微博中，只要检查到存在特殊字符，立刻设置$chrkey为真，并退出循环；
+                                                foreach ($table_change as  $key=>$val)
+                                                {
+                                                        if(strpos($tcon,$key)){
+                                                                $chrkey = true;
+                                                                break;
+                                                        }
+                                                }
+                                                if ($chrkey){//做判断，如果$chrkey为真，则说明存在定义的特殊字符，则输出替换过的微博内容
+                                                        echo strtr($tcon,$table_change);
+                                                }elseif(strpos($tcon,'&')){//如果没有定义的特殊字符，那就判断是否存在&，如果有，则替换特殊字符的&和;
+                                                        echo strtr($tcon,'&;','()');
+                                                }else{//如果以上都假，那就说明微博没有任何特色字符，直接输出微博内容。
+                                                        echo $tcon;
+                                                }
+?><?php //以上由@西安胖子马增加 ?></title>
                 <description><![CDATA[<?php echo $tcon; ?>]]></description>
-				<pubDate><?php echo Date('Y-m-j, g:i a'); ?></pubDate>
+                <pubDate><?php echo Date('Y-m-j, g:i a'); ?></pubDate>
                 <guid><?php echo $tguid; ?></guid>
                 <link><?php echo $tguid; ?></link>
         </item>
